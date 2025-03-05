@@ -49,7 +49,7 @@ jobs:
 
       - name: Push tags to github
         if: success() && steps.tag.outcome == 'success'
-        run: cargo release push -v --execute --no-confirm
+        run: cargo release push -v --allow-branch fix-release,main --execute --no-confirm
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
