@@ -36,7 +36,7 @@ jobs:
 
       - name: Create tags
         id: tag
-        run: cargo release tag -v --execute
+        run: cargo release tag -v --allow-branch fix-release,main --execute
         # Continue on error so we don't get a CI failure (red X) when no release is needed.
         # Each following step must check `steps.tag.outcome` (NOT `steps.tag.conclusion`).
         continue-on-error: true
