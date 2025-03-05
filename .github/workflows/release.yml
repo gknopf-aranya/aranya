@@ -52,9 +52,3 @@ jobs:
         run: cargo release push -v --allow-branch fix-release,main --execute --no-confirm
         env:
           GITHUB_TOKEN: ${{ github.token }}
-
-      - name: Call publish workflow
-        if: success() && steps.tag.outcome == 'success'
-        uses: ./.github/workflows/publish.yml
-        with:
-          workflow: publish
