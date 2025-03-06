@@ -87,7 +87,6 @@ jobs:
           echo "needs.tag.outputs.outcome=${{ needs.tag.outputs.outcome }}"
 
       - name: Create Release
-        if: needs.tag.outputs.outcome == 'success'
         id: release
         uses: aranya-project/release-action@main
         with:
@@ -101,7 +100,7 @@ jobs:
   build:
     needs:
       - tag
-    if: ${{ needs.tag.outputs.outcome }} == 'success'
+    if: needs.tag.outputs.outcome == 'success'
     uses: ./.github/workflows/build.yml
     with:
       workflow: build
@@ -109,7 +108,7 @@ jobs:
   docs:
     needs:
       - tag
-    if: ${{ needs.tag.outputs.outcome }} == 'success'
+    if: needs.tag.outputs.outcome == 'success'
     uses: ./.github/workflows/doc.yml
     with:
       workflow: doc
@@ -121,7 +120,7 @@ jobs:
       - tag
       - release
       - build
-    if: ${{ needs.tag.outputs.outcome }} == 'success'
+    if: needs.tag.outputs.outcome == 'success'
     strategy:
       matrix:
         target:
@@ -154,7 +153,7 @@ jobs:
       - tag
       - release
       - build
-    if: ${{ needs.tag.outputs.outcome }} == 'success'
+    if: needs.tag.outputs.outcome == 'success'
     strategy:
       matrix:
         target:
@@ -187,7 +186,7 @@ jobs:
       - tag
       - release
       - docs
-    if: ${{ needs.tag.outputs.outcome }} == 'success'
+    if: needs.tag.outputs.outcome == 'success'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
