@@ -87,6 +87,7 @@ jobs:
           echo "needs.tag.outputs.outcome=${{ needs.tag.outputs.outcome }}"
 
       - name: Create Release
+        if: ${{ needs.tag.outputs.outcome }} == 'success'
         id: release
         uses: aranya-project/release-action@main
         with:
