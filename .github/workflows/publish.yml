@@ -24,6 +24,7 @@ jobs:
           allowUpdates: true
           prerelease: false
           makeLatest: legacy
+          tag: ${{ inputs.tag }}
     outputs:
       upload-url: ${{ steps.release.outputs.upload_url }}
 
