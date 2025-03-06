@@ -57,7 +57,7 @@ jobs:
         continue-on-error: true
 
       - name: Version
-        if: success() && steps.push.outcome == 'success'
+        if: success()
         run: |
           echo "VERSION=$(cargo metadata --format-version=1 --no-deps | jq --raw-output '.packages[0].version')" >> $GITHUB_OUTPUT
         id: version
@@ -80,6 +80,12 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
+      - name: Show Outputs
+        if: success()
+        run: |
+          echo "tag=${{ needs.tag.outputs.tag }}"
+          echo "needs.tag.outputs.outcome=${{ needs.tag.outputs.outcome }}"
+
       - name: Create Release
         id: release
         uses: aranya-project/release-action@main
