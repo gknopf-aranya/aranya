@@ -14,9 +14,9 @@ on:
       - fix-release
 
 jobs:
-  # Release unreleased crates and create a git tag
-  release:
-    name: Release
+  # Publish unpublished crates and create a git tag
+  publish:
+    name: Publish
     runs-on: ubuntu-latest
     concurrency:
       group: release-${{ github.ref }}
@@ -56,9 +56,15 @@ jobs:
           echo "VERSION=$(cargo metadata --format-version=1 --no-deps | jq --raw-output '.packages[0].version')" >> $GITHUB_OUTPUT
         id: version
 
-      - name: Call publish workflow
-        if: success() && steps.tag.outcome == 'success'
-        uses: ./.github/workflows/publish.yml
-        with:
-          workflow: publish
-          tag: v${{ steps.tag.outputs.VERSION }}
+    outputs:
+      tag: v${{ steps.version.outputs.VERSION }}
+      outcome: ${{ steps.tag.outcome }}
+
+  release:
+    needs:
+      - publish
+    if: ${{ needs.publish.outputs.outcome }} == 'success'
+    uses: ./.github/workflows/publish.yml
+    with:
+      workflow: publish
+      tag: ${{ needs.publish.outputs.tag }}
